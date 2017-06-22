@@ -105,6 +105,18 @@ preamble = [chirp(t_prehalf,f_min,pre_len/2/Fs,f_max), chirp(t_lasthalf,f_max,pr
 frame = [preamble;zeros(blank_len,1);repmat(symbol_CP,N_symbol,1)];
 seq = [zeros(Fs*0.5,1);repmat(frame,N_frame,1)];
 
+sound(seq, 44100);
+
+
+%% record audio
+recorder = audiorecorder(44100,16,1,1);
+
+disp('Start speaking.')
+recordblocking(recorder, 25);
+disp('End of Recording.');
+
+audiowrite('C:\Users\Erdo\Desktop\Designing studies\export\recordedAudio.wav', getaudiodata(recorder) ,44100);
+
 % show audio signal with 2 frames
 figure;
 plot([1:length(seq)]/Fs,seq);
@@ -113,7 +125,9 @@ ylabel('amplitude');
 title('audio OFDM signal with 2 frames');
 
 %% AWGN channel, introduce noise
-sig_awgn = awgn(seq,snr);
+% sig_awgn = awgn(seq,snr);
+
+sig_awgn = getaudiodata(recorder);
 
 %% ---------------demodulation-------------------------------
 coef_MF_preamble = preamble(end:-1:1);  % coeffient of matched filter
@@ -136,7 +150,8 @@ for i = 1:N_i   % loop of CFO values
 %     plot(data_MFflted);
 
     % this threshold should be adjusted according to different snr level
-    sync_threshold = 50;
+    sync_threshold = .15;
+    disp(size(find(data_MFflted > sync_threshold)));
     index_temp = find(data_MFflted > sync_threshold);
     % a simple function used to search for index of starting sample of a frame
     index_arr = sort_index(data_MFflted,index_temp,N_frame);  
