@@ -115,7 +115,10 @@ disp('Start speaking.')
 recordblocking(recorder, 25);
 disp('End of Recording.');
 
-audiowrite('C:\Users\Erdo\Desktop\Designing studies\export\recordedAudio.wav', getaudiodata(recorder) ,44100);
+fileName = datestr(now,'HH-MM-SS');
+outputPath = strcat('C:\Users\Erdo\Desktop\Designing studies\export\', strcat(fileName, '.wav'));
+disp(outputPath)
+audiowrite(outputPath, getaudiodata(recorder) ,44100);
 
 % show audio signal with 2 frames
 figure;
