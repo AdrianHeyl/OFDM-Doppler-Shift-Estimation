@@ -103,7 +103,7 @@ t_lasthalf = [pre_len/2+1:pre_len]/Fs;
 preamble = [chirp(t_prehalf,f_min,pre_len/2/Fs,f_max), chirp(t_lasthalf,f_max,pre_len/Fs,f_min)]';
 
 frame = [preamble;zeros(blank_len,1);repmat(symbol_CP,N_symbol,1)];
-seq = [zeros(Fs*0.5,1);repmat(frame,N_frame,1)];
+seq = [zeros(Fs*0.5,1);frame; zeros(Fs*1,1); frame];
 
 % show audio signal with 2 frames
 figure;
