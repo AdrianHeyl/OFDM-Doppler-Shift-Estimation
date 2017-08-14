@@ -87,29 +87,7 @@ t_lasthalf = [pre_len/2+1:pre_len]/Fs;
 preamble = [chirp(t_prehalf,f_min,pre_len/2/Fs,f_max), chirp(t_lasthalf,f_max,pre_len/Fs,f_min)]';
 
 frame = [preamble;zeros(blank_len,1);repmat(symbol_CP,N_symbol,1)];
-seq = [zeros(Fs*0.5,1);frame;zeros(Fs*1,1);frame];
-
-% % show audio signal with 2 frames
-% figure;
-% plot([1:length(seq)]/Fs,seq);
-% xlabel('t/s');
-% ylabel('amplitude');
-% title('audio OFDM signal with 2 frames');
-
-sound(seq, 44100);
-
-
-%% record audio
-recorder = audiorecorder(44100,16,1,1);
-
-disp('Start speaking.')
-recordblocking(recorder, 14);
-disp('End of Recording.');
-
-fileName = datestr(now,'HH-MM-SS');
-outputPath = strcat('C:\Users\Erdo\Desktop\Designing studies\export\', strcat(fileName, '.wav'));
-disp(outputPath)
-audiowrite(outputPath, getaudiodata(recorder) ,44100);
+seq = [zeros(Fs*0.5,1);frame; zeros(Fs*1,1); frame];
 
 
 %% AWGN channel, introduce noise
