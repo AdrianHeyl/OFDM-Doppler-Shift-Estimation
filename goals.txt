@@ -1,0 +1,8 @@
+Filter noise from audio files.
+Calculate optimal result based on the velocity of the transmitter and the position of the receiver.
+
+Calculate OFDM based approximation.
+Calculate FFT based approximation.
+
+Prepare documentation.
+Prepare presentation.

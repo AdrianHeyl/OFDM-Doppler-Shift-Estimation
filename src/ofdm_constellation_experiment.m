@@ -15,15 +15,18 @@ symbolCP_len = ifft_size + cp_length;    % symbol length with prefix and postfix
 blank_len = 100;    % there is a blank interval between two frames
 N_symbol = 100;     % number of symbol in a frame
 N_frame = 2;        % number of frames in generated audio file
+N_cluster = N_frame;
 t = [1:symbolCP_len]'/Fs;
 deg = zeros(N_symbol,1);    % angle of each symbol, unit degree
 
 sc_mask = zeros(N_sc,1);   % subcarrier mask
 sc_active = [100 1000];    % active subcarrier index
 sc_mask(sc_active) = 1;    % only active subcarriers are enabled to transmit data, others are blocked
+sc_step = 100;
 
+sync_offset = 0;
 
-filename = ['../adrian/512-16-54-21.wav']; %BH = better hardware
+filename = '../res/mehmedali/512-fullspeed.wav'; %BH = better hardware
 %% preamble
 f_min = 8000;
 f_max = 12000;
@@ -115,3 +118,5 @@ for i = 1:N_cluster
         close all;
     end
 end
+
+disp("end");
