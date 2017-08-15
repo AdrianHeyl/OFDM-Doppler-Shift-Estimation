@@ -1,12 +1,15 @@
 clear all, close all, clc;
 
-Fpass = 100;
-Fstop = 150;
-Apass = 1;
+Fstop = 350;
+Fpass = 400;
 Astop = 65;
+Apass = 0.5;
 Fs = 44100;
 
-d = designfilt('highpassfir', 'PassbandFrequency', Fpass, ...
-                'StopbandFrequency', Fstop, 'PassbandRipple', Apass, ...
-                'StopbandAtenuation', Astop, 'DesignMethod', 'equiripple', ...
-                'SampleRate', Fs);
+d = designfilt('highpassfir','StopbandFrequency',Fstop, ...
+  'PassbandFrequency',Fpass,'StopbandAttenuation',Astop, ...
+  'PassbandRipple',Apass,'SampleRate',Fs,'DesignMethod','equiripple');
+
+fvtool(d)
+            
+disp('end');
