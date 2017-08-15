@@ -1,0 +1,10 @@
+Fpass = 0;
+Fstop = 0;
+Apass = 0;
+Astop = 0;
+Fs = 44100;
+
+d = designfilter('highpassfir', 'PassbandFrequency', Fpass, ...
+                'StopbandFrequency', Fstop, 'PassbandRipple', Apass, 
+                'StopbandAtenuation', Astop, 'DesignMethod', 'equiripple', 
+                'SampleRate', Fs);
