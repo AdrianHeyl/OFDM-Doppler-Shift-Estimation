@@ -6,10 +6,13 @@ Astop = 65;
 Apass = 0.5;
 Fs = 44100;
 
-d = designfilt('highpassfir','StopbandFrequency',Fstop, ...
-  'PassbandFrequency',Fpass,'StopbandAttenuation',Astop, ...
-  'PassbandRipple',Apass,'SampleRate',Fs,'DesignMethod','equiripple');
+%d = designfilt('highpassfir','StopbandFrequency',Fstop, ...
+%  'PassbandFrequency',Fpass,'StopbandAttenuation',Astop, ...
+%  'PassbandRipple',Apass,'SampleRate',Fs,'DesignMethod','equiripple');
 
-fvtool(d)
+%fvtool(d)
+
+
+
             
 disp('end');

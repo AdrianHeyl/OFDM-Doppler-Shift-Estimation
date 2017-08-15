@@ -92,7 +92,8 @@ seq = [zeros(Fs*0.5,1);frame; zeros(Fs*1,1); frame];
 
 %% AWGN channel, introduce noise
 % sig_awgn = awgn(seq,snr);
-sig_received = getaudiodata(recorder);
+filepath = '../res/mehmedali/unfiltered/512-halfspeed.wav';
+sig_received = audioread(filepath);
 
 %% ---------------demodulation-------------------------------
 coef_MF_preamble = preamble(end:-1:1);  % coeffient of matched filter
@@ -106,6 +107,24 @@ data_MFflted = filter(coef_MF_preamble,1,sig_received);
 % this figure is used to oberserve the peak value manully
 figure;
 plot(data_MFflted);
+title('data\_MFflted');
+
+Y = fft(data_MFflted);
+figure;
+
+T = 1/Fs;             % Sampling period       
+L = 100;             % Length of signal
+t = (0:L-1)*T;        % Time vector
+
+P2 = abs(Y/L);
+P1 = P2(1:L/2+1);
+P1(2:end-1) = 2*P1(2:end-1);
+f = Fs*(0:(L/2))/L;
+
+plot(f, P1) 
+title('Single-Sided Amplitude Spectrum of S(t)')
+xlabel('f (Hz)')
+ylabel('|P1(f)|')
 
 % this threshold should be adjusted according to different snr level
 sync_threshold = .15;
