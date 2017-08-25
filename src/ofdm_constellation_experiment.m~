@@ -40,10 +40,11 @@ frame_len = pre_len + symbolCP_len * 10 + blank_len*2;
 
 %% synchronization, find index using matched filter
 % highpass filter
-Fs_HP = 7000/Fs;
-Fp_HP = 8000/Fs;
+Fp_HP = 7000/Fs;
+Fs_HP = 8000/Fs;
 order = 127;
-coef_HP = firls(order,[0 Fs_HP Fp_HP 1],[0 0 1 1]);
+coef_HP = firls(order,[0 Fp_LP Fs_LP 1],[0 0 1 1]);
+
 
 [sig_received fs] = audioread(filename);
 coef_MF_preamble = preamble(end:-1:1);
@@ -68,9 +69,8 @@ plot(linspace(-Fs/2,Fs/2,length(sig_noist_flt)),abs(fftshift(fft(sig_noist_flt))
 title('spectrum');
 
 
-figure;
-plot(data_MFflted);
-title('data after matched filter for synchronization');
+%subplot(2, 1, 1)
+%plot(data_MFflted);
 
 %subplot(2, 1, 2)
 %plot(sig_received)

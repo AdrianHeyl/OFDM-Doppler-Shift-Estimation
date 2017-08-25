@@ -25,9 +25,9 @@ one1 = ones(1, length(t1));
 
 %% POSITIONS
 
-stp1_1 = [-R * cos(pi * t2a / t2a(end)) + .55; R * sin(pi * t2a / t2a(end)) + L / 2];
+stp1_1 = [-R * cos(pi * t2a / t2a(end)) + .55; .15 * sin(pi * t2a / t2a(end)) + .69];
 stp1_2 = [.7 * one1; .69 - V * t1];
-stp1_3 = [R * cos(pi * t2a / t2a(end)) + .55; -R * sin(pi * t2a / t2a(end)) - L / 2];
+stp1_3 = [.15 * cos(pi * t2a / t2a(end)) + .55; -.15 * sin(pi * t2a / t2a(end)) - .69];
 stp1_4 = [.4 * one1; -.69 + V * t1];
 
 %% DISTANCE AND VELOCITY
