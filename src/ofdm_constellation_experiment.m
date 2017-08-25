@@ -67,6 +67,7 @@ subplot(224);
 plot(linspace(-Fs/2,Fs/2,length(sig_noist_flt)),abs(fftshift(fft(sig_noist_flt))));
 title('spectrum');
 
+close all
 
 figure;
 plot(data_MFflted);
