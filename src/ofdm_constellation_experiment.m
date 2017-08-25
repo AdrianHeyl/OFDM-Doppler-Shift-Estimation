@@ -20,13 +20,13 @@ t = [1:symbolCP_len]'/Fs;
 deg = zeros(N_symbol,1);    % angle of each symbol, unit degree
 
 sc_mask = zeros(N_sc,1);   % subcarrier mask
-sc_active = [100 1000];    % active subcarrier index
+sc_active = [100 200];    % active subcarrier index
 sc_mask(sc_active) = 1;    % only active subcarriers are enabled to transmit data, others are blocked
 sc_step = 100;
 
 sync_offset = 0;
 
-filename = '../res/mehmedali/512-fullspeed.wav'; %BH = better hardware
+filename = '../res/mehmedali/unfiltered/512-fullspeed.wav'; %BH = better hardware
 %% preamble
 f_min = 8000;
 f_max = 12000;
@@ -69,6 +69,8 @@ coef_BP = firls(order,[0 Fs1_BP Fp1_BP Fp2_BP Fs2_BP 1],[0 0 1 1 0 0]);
 
 %% demodulation
 
+sc_active_backup = sc_active;
+
 for i = 1:N_cluster
     sc_mask = zeros(N_sc,1);   % subcarrier mask
     sc_active = i*sc_step;    % active subcarrier index
@@ -90,6 +92,9 @@ for i = 1:N_cluster
         BPSK_demodulated = frequency_data(1:N_sc);
         % normalization
         BPSK_demodulated = BPSK_demodulated / (max(abs(BPSK_demodulated)));
+        
+        q = sc_active_backup(2) + 1;
+        deg(j) = angle(BPSK_demodulated(q));    % calculate the angle of a symbol
         
         if i == 90
             figure;
@@ -117,6 +122,14 @@ for i = 1:N_cluster
     if i == 90
         close all;
     end
+    
+    % show accumulate phase rotation across all the symbols in one frame
+    figure;
+    plot(unwrap(deg)/pi);
+    xlabel('symbol index');
+    ylabel('accumulated phase rotation/pi');
+    title(['N\_sc = ',num2str(N_sc),', Asc=',num2str(q-1)]);
+    v_angular = gradient(unwrap(deg)/pi)';
 end
 
 disp("end");

@@ -162,8 +162,6 @@ for i = 1:N_i   % loop of CFO values
 
         q = sc_active(2)+1;
         deg(j) = angle(BPSK_demodulated(q));    % calculate the angle of a symbol
-%         v_angular(j) = deg - deg_pre;
-%         deg_pre = deg;
 
         % plot constellation for each OFDM symbol
         if flag_figure
