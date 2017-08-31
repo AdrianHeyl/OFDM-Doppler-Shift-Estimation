@@ -46,13 +46,17 @@
 function f = filter_preamble(samples)
 
     Fs = 44100;
-    filter_preamble_start = [1; 15000 * length(samples) / Fs];
-    filter_preamble_stop = [5000 * length(samples) / Fs; length(samples) / 2];
+    filter_preamble_start = [1; floor(15000 * length(samples) / Fs)];
+    filter_preamble_stop = [floor(5000 * length(samples) / Fs); length(samples) / 2];
+    
+    y = fft(samples);
 
     for i = 1 : length(filter_preamble_start)
-        samples(filter_preamble_start(i):filter_preamble_stop(i)) = 0;
-        samples(length(samples) - filter_preamble_stop(i) + 1:length(samples) - filter_preamble_start(i) + 1) = 0;
+        y(filter_preamble_start(i):filter_preamble_stop(i)) = 0;
+        y(length(y) - filter_preamble_stop(i) + 1:length(y) - filter_preamble_start(i) + 1) = 0;
     end
     
-    f = samples;
+    z = ifft(y)
+    
+    f = z;
 end

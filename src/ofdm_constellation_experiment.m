@@ -45,7 +45,8 @@ Fp_HP = 8000/Fs;
 order = 127;
 coef_HP = firls(order,[0 Fs_HP Fp_HP 1],[0 0 1 1]);
 
-[sig_received fs] = audioread(filename);
+sig_received = audioread(filename);
+sig_received = samplefilter>filter_preamble(sig_received);
 coef_MF_preamble = preamble(end:-1:1);
 sig_noist_flt = filter(coef_HP,1,sig_received);
 data_MFflted = filter(coef_MF_preamble,1,sig_noist_flt);
@@ -67,7 +68,7 @@ subplot(224);
 plot(linspace(-Fs/2,Fs/2,length(sig_noist_flt)),abs(fftshift(fft(sig_noist_flt))));
 title('spectrum');
 
-close all
+%close all
 
 figure;
 plot(data_MFflted);
@@ -155,12 +156,16 @@ for i = 1:N_cluster
     end
     
     % show accumulate phase rotation across all the symbols in one frame
-    figure;
-    plot(unwrap(deg)/pi);
-    xlabel('symbol index');
-    ylabel('accumulated phase rotation/pi');
-    title(['N\_sc = ',num2str(N_sc),', Asc=',num2str(q-1)]);
+    %figure;
+    %plot(unwrap(deg)/pi);
+    %xlabel('symbol index');
+    %ylabel('accumulated phase rotation/pi');
+    %title(['N\_sc = ',num2str(N_sc),', Asc=',num2str(q-1)]);
     v_angular = gradient(unwrap(deg)/pi)';
+    
+    figure;
+    plot(v_angular)
+    title('v\_angular')
 end
 
 disp("end");

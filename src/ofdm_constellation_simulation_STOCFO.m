@@ -113,7 +113,8 @@ ylabel('amplitude');
 title('audio OFDM signal with 2 frames');
 
 %% AWGN channel, introduce noise
-sig_awgn = awgn(seq,snr);
+%sig_awgn = awgn(seq,snr);
+sig_awgn = seq;
 
 %% ---------------demodulation-------------------------------
 coef_MF_preamble = preamble(end:-1:1);  % coeffient of matched filter
@@ -200,6 +201,10 @@ for i = 1:N_i   % loop of CFO values
     title(['AWGN, snr = ',num2str(snr),'dB, N\_sc = ',num2str(N_sc),', Asc=',num2str(q-1),' CFO=',num2str(CFO(i))]);
     v_angular = gradient(unwrap(deg)/pi)';
     disp(['CFO = ',num2str(CFO(i)), ' angular v = ',num2str(mean(v_angular)),'pi, std=',num2str(std(v_angular))]);
+    
+    close all
+    figure;
+    plot(v_angular)
 end  % end of loop i
 
 
