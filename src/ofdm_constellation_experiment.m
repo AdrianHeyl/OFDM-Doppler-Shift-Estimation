@@ -14,7 +14,7 @@ cp_length = 256;  % the pre and post fix are the same length of ifft_size, hereb
 symbolCP_len = ifft_size + cp_length;    % symbol length with prefix and postfix
 blank_len = 100;    % there is a blank interval between two frames
 N_symbol = 100;     % number of symbol in a frame
-N_frame = 10;        % number of frames in generated audio file
+N_frame = 8;        % number of frames in generated audio file
 N_cluster = N_frame;
 t = [1:symbolCP_len]'/Fs;
 deg = zeros(N_symbol,1);    % angle of each symbol, unit degree
@@ -38,56 +38,22 @@ preamble = [chirp(t_prehalf,f_min,pre_len/2/Fs,f_max),...
 
 frame_len = pre_len + symbolCP_len * 10 + blank_len*2;
 
-%% synchronization, find index using matched filter
-% highpass filter
-Fs_HP = 7000/Fs;
-Fp_HP = 8000/Fs;
-order = 127;
-coef_HP = firls(order,[0 Fs_HP Fp_HP 1],[0 0 1 1]);
+%% synchronization, find index using passband and matched filter
 
+% read audio file
 sig_received = audioread(filename);
-%sig_received = samplefilter>filter_preamble(sig_received);
-% filter everything but preamble
-    filter_preamble_start = [1; floor(10000 * length(sig_received) / Fs)];
-    filter_preamble_stop = [floor(5000 * length(sig_received) / Fs); length(sig_received) / 2];
-    
-    y = fft(sig_received);
 
-    for i = 1 : length(filter_preamble_start)
-        y(filter_preamble_start(i):filter_preamble_stop(i)) = 0;
-        y(length(y) - filter_preamble_stop(i) + 1:length(y) - filter_preamble_start(i) + 1) = 0;
-    end
-    
-    y = ifft(y);
-    
+% passband filter 7k to 13k.
+preamble_filter = firls(127, [0 6500 7000 13000 13500 Fs/2] ./ (Fs / 2), [0 0 1 1 0 0]);
+sig_noist_flt = filter(preamble_filter,1,sig_received);
+
+% matched filter
 coef_MF_preamble = preamble(end:-1:1);
-%sig_noist_flt = filter(coef_HP,1,y);
-%data_MFflted = filter(coef_MF_preamble,1,sig_noist_flt);
-data_MFflted = filter(coef_MF_preamble, 1, y);
+data_MFflted = filter(coef_MF_preamble,1,sig_noist_flt);
 
-% figure;
-% subplot(221);
-% plot(sig_received);
-% title('recieved signal');
-% 
-% subplot(222);
-% plot(linspace(-Fs/2,Fs/2,length(sig_received)),abs(fftshift(fft(sig_received))));
-% title('spectrum');
-% 
-% subplot(223);
-% plot(sig_noist_flt);
-% title('flted by Highpass filter');
-% 
-% subplot(224);
-% plot(linspace(-Fs/2,Fs/2,length(sig_noist_flt)),abs(fftshift(fft(sig_noist_flt))));
-% title('spectrum');
-% 
 figure;
 plot(linspace(1 / Fs, length(sig_received), length(data_MFflted)), data_MFflted);
 title('data after matched filter for synchronization');
-
-%subplot(2, 1, 2)
-%plot(sig_received)
 
 sync_threshold = 0.4;
 
