@@ -14,19 +14,19 @@ cp_length = 256;  % the pre and post fix are the same length of ifft_size, hereb
 symbolCP_len = ifft_size + cp_length;    % symbol length with prefix and postfix
 blank_len = 100;    % there is a blank interval between two frames
 N_symbol = 100;     % number of symbol in a frame
-N_frame = 2;        % number of frames in generated audio file
+N_frame = 10;        % number of frames in generated audio file
 N_cluster = N_frame;
 t = [1:symbolCP_len]'/Fs;
 deg = zeros(N_symbol,1);    % angle of each symbol, unit degree
 
 sc_mask = zeros(N_sc,1);   % subcarrier mask
-sc_active = [100 200 300];    % active subcarrier index
+sc_active = [100 200 300 400 500];    % active subcarrier index
 sc_mask(sc_active) = 1;    % only active subcarriers are enabled to transmit data, others are blocked
 sc_step = 100;
 
 sync_offset = 128;
 
-filename = '../res/mehmedali/unfiltered/512-fullspeed.wav'; %BH = better hardware
+filename = '../res/adrian/unfiltered/512-halfspeed.wav'; %BH = better hardware
 %% preamble
 f_min = 8000;
 f_max = 12000;
@@ -48,7 +48,7 @@ coef_HP = firls(order,[0 Fs_HP Fp_HP 1],[0 0 1 1]);
 sig_received = audioread(filename);
 %sig_received = samplefilter>filter_preamble(sig_received);
 % filter everything but preamble
-    filter_preamble_start = [1; floor(15000 * length(sig_received) / Fs)];
+    filter_preamble_start = [1; floor(10000 * length(sig_received) / Fs)];
     filter_preamble_stop = [floor(5000 * length(sig_received) / Fs); length(sig_received) / 2];
     
     y = fft(sig_received);
@@ -61,8 +61,9 @@ sig_received = audioread(filename);
     y = ifft(y);
     
 coef_MF_preamble = preamble(end:-1:1);
-sig_noist_flt = filter(coef_HP,1,y);
-data_MFflted = filter(coef_MF_preamble,1,sig_noist_flt);
+%sig_noist_flt = filter(coef_HP,1,y);
+%data_MFflted = filter(coef_MF_preamble,1,sig_noist_flt);
+data_MFflted = filter(coef_MF_preamble, 1, y);
 
 % figure;
 % subplot(221);
@@ -170,7 +171,7 @@ for i=1:length(sc_active)
 
         figure;
         plot(v_angular)
-        title(['v\_angular, sc\_active = ', num2str(sc_active(i)), ' frame\_index = ', num2str(index_arr_sorted(k))])
+        title(['v\_angular, sc\_active = ', num2str(sc_active(i)), ', index\_arr\_sorted = ', num2str(index_arr_sorted(k))])
     end
     if i == 90
         close all;
