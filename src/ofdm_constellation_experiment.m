@@ -1,6 +1,7 @@
 % this file analyses the recorded signal, shows that the change of
 % constellation of different symbols
-clear all, close all, clc;
+close all;
+clc;
 
 %% setting
 
@@ -16,7 +17,7 @@ blank_len = 100;    % there is a blank interval between two frames
 N_symbol = 100;     % number of symbol in a frame
 N_frame = 8;        % number of frames in generated audio file
 N_cluster = N_frame;
-t = [1:symbolCP_len]'/Fs;
+t = (1:symbolCP_len)'/Fs;
 deg = zeros(N_symbol,1);    % angle of each symbol, unit degree
 
 sc_mask = zeros(N_sc,1);   % subcarrier mask
@@ -28,11 +29,12 @@ sync_offset = 128;
 
 filename = '../res/adrian/unfiltered/512-halfspeed.wav'; %BH = better hardware
 %% preamble
+
 f_min = 8000;
 f_max = 12000;
 pre_len = 1024;
-t_prehalf = [1:pre_len/2]/Fs;
-t_lasthalf = [pre_len/2+1:pre_len]/Fs;
+t_prehalf = (1:pre_len/2)/Fs;
+t_lasthalf = (pre_len/2+1:pre_len)/Fs;
 preamble = [chirp(t_prehalf,f_min,pre_len/2/Fs,f_max),...
     chirp(t_lasthalf,f_max,pre_len/Fs,f_min)]';
 
@@ -63,6 +65,7 @@ disp(index_arr_sorted);
 
 
 %% design of bandpass and lowpass FIR filter
+
 % lowpass filter
 Fp_LP = 7000/Fs;
 Fs_LP = 8000/Fs;
@@ -81,7 +84,6 @@ coef_BP = firls(order,[0 Fs1_BP Fp1_BP Fp2_BP Fs2_BP 1],[0 0 1 1 0 0]);
 
 %for i = 1:N_cluster
 for i=1:length(sc_active)
-    disp(i)
     sc_mask = zeros(N_sc,1);   % subcarrier mask
 %    sc_active = i*sc_step;    % active subcarrier index
     sc_mask(sc_active(i)) = 1;
@@ -142,13 +144,4 @@ for i=1:length(sc_active)
     if i == 90
         close all;
     end
-    
-    % show accumulate phase rotation across all the symbols in one frame
-    %figure;
-    %plot(unwrap(deg)/pi);
-    %xlabel('symbol index');
-    %ylabel('accumulated phase rotation/pi');
-    %title(['N\_sc = ',num2str(N_sc),', Asc=',num2str(q-1)]);
 end
-
-disp("end");
