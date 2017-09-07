@@ -1,0 +1,5 @@
+setup1:
+speaker moves back and forth in a line with mic, distance is about 20cm~80cm
+
+setup2:
+speaker moves back and forth 0.5m in front of the mic, distance is -1.5m~1.5m
