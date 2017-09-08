@@ -13,7 +13,7 @@ load('golaySeq.mat');
 N_sc = 512;  %number of carriers
 c = 343;  % speed of sound in the air
 
-filename = '../res/exp07-09-2017/setup1-sc256-No2.wav';
+filename = '../res/exp07-09-2017/setup1-sc256-No1.wav';
 
 % select step_sc accoring to N_sc, step_sc is the distance between active
 % subcarriers 

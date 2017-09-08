@@ -7,6 +7,8 @@
 %          -index_arr: an array of index of starting point of frames
 function index_arr = sync_offline(sig,preamble,len_frame)
     
+    threshold = 1.8;
+    
     flag_debug = 1;
     index_arr = [];
     % matched filter, which works like correlation function
@@ -19,6 +21,13 @@ function index_arr = sync_offline(sig,preamble,len_frame)
     end
     % get upper and lower envolop of matched filter output
     [up,lo] = envelope(data_MFflted,1000,'peak');
+    if flag_debug
+        figure;
+        hold on;
+        plot(data_MFflted);
+        plot(up);
+        title('index detection')
+    end
     len_sig = length(sig);
     len_win = 10*length(preamble);
     i = 1;
@@ -34,7 +43,7 @@ function index_arr = sync_offline(sig,preamble,len_frame)
         if i_tail > len_sig
             i_tail = len_sig;
         end
-        idx = find(data_MFflted(i:i_tail) > 2*mean(up(i:i_tail)));
+        idx = find(data_MFflted(i:i_tail) > threshold*mean(up(i:i_tail)));
 
         if ~isempty(idx)
             idx = idx + i - 1;
