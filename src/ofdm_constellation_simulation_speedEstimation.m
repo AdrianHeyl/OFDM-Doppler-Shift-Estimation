@@ -13,7 +13,7 @@ load('golaySeq.mat');
 N_sc = 512;  %number of carriers
 c = 343;  % speed of sound in the air
 
-filename = '../res/exp07-09-2017/setup1-sc256-No1.wav';
+filename = '../res/exp08-09-2017/setup1-sc512-No2.wav';
 
 % select step_sc accoring to N_sc, step_sc is the distance between active
 % subcarriers 
@@ -104,7 +104,7 @@ w_symbol_diff = []; % \omiga per symbol based on diff
 w_symbol_gra = []; %\omiga per symbol based on gradient
 
 % loop through multiple frames
-for i_frame = 1:N_targetFrameS
+for i_frame = 1:N_targetFrame
     % create a matrix to record the phase info in a frame
     deg = zeros(N_symbol,length(sc_active));
     
@@ -161,13 +161,13 @@ for i_frame = 1:N_targetFrameS
 end
 
 % this is for debug, see the effect of smooth on the phase
-for k = 1:length(sc_active)
-    figure;
-    hold on;
-    plot(deg_unwraped_woSmooth_total(:,k));
-    plot(deg_unwraped_total(:,k));
-    legend('wosmooth','smooth');
-end
+% for k = 1:length(sc_active)
+%     figure;
+%     hold on;
+%     plot(deg_unwraped_woSmooth_total(:,k));
+%     plot(deg_unwraped_total(:,k));
+%     legend('wosmooth','smooth');
+% end
 
 %% speed estimation based on phase information
 factor = 2.85;
@@ -220,7 +220,9 @@ plot(dt,v_symbol_diff_min);
 plot(dt,v_symbol_gra_min);
 % legend('diff\_avg','gra\_avg','diff\_min','gra\_min');
 legend('diff\_min','gra\_min');
-
+title('speed estimation')
+xlabel('time [s]')
+ylabel('velocity [m/s]')
 
 % transform symbol speed to sample speed, to compare with groud truth, not
 % usefull right now since we do not have a ground truth
@@ -308,7 +310,7 @@ if flag_symbol2sample
 end
 
 %% perSC review
-flag_perSC = 1;
+flag_perSC = 0;
 
 if flag_perSC
 

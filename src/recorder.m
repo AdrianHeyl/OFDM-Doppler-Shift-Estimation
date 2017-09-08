@@ -4,8 +4,8 @@ clc;
 
 %% settings
 
-duration = 18;
-destination = '../res/exp07-09-2017/setup2-sc512-No1.wav';
+duration = 24;
+destination = '../res/exp08-09-2017/setup2-sc512-No4.wav';
 
 Fs = 44100;
 

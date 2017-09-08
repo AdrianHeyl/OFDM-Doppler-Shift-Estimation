@@ -7,7 +7,8 @@
 %          -index_arr: an array of index of starting point of frames
 function index_arr = sync_offline(sig,preamble,len_frame)
     
-    threshold = 1.8;
+    threshold_rel = 1.8;
+    threshold_abs = 0.4;
     
     flag_debug = 1;
     index_arr = [];
@@ -43,7 +44,7 @@ function index_arr = sync_offline(sig,preamble,len_frame)
         if i_tail > len_sig
             i_tail = len_sig;
         end
-        idx = find(data_MFflted(i:i_tail) > threshold*mean(up(i:i_tail)));
+        idx = find(data_MFflted(i:i_tail) > threshold_rel*mean(up(i:i_tail)) & data_MFflted(i:i_tail) > threshold_abs);
 
         if ~isempty(idx)
             idx = idx + i - 1;
