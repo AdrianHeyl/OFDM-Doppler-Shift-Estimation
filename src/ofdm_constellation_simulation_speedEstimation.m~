@@ -75,11 +75,13 @@ figure;
 plot(sig_received);
 
 
-%% check settings
+%%
 disp('check settings...');
 disp(['Nsc =',num2str(N_sc), ', cp-length=',num2str(cp_length)]);
 disp(['Nsymbol in frame = ',num2str(N_symbol)]);
-disp(['preamble:',num2str(pre_len),', fmin-fmax:',num2str(f_min),'-',num2str(f_max)]);
+disp(['preamble:',num2str()]);
+disp([]);
+disp([]);
 %% synchronization
 % new function developed for synchronization
 index_arr = sync_offline(sig_received,preamble,len_frame);
